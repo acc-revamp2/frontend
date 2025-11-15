@@ -201,6 +201,7 @@ const AddWidgetModal: React.FC<AddWidgetModalProps> = ({ isOpen, onClose, onSucc
           widgetTypeId: selectedWidgetType,
           propertyIds: selectedProperties,
           displayName: widgetName || undefined,
+          numSeries: numSeries,
         }),
       });
 
@@ -238,7 +239,6 @@ const AddWidgetModal: React.FC<AddWidgetModalProps> = ({ isOpen, onClose, onSucc
       setError('');
     } else if (step === 2 && selectedWidgetType) {
       setStep(3);
-      loadDevicesByType();
       setSelectedProperties(Array(numSeries).fill(null));
       setError('');
     }
@@ -254,7 +254,7 @@ const AddWidgetModal: React.FC<AddWidgetModalProps> = ({ isOpen, onClose, onSucc
   const canProceedToNext = () => {
     if (step === 1) return selectedDeviceType !== null;
     if (step === 2) return selectedWidgetType !== null;
-    if (step === 3) return selectedDevice !== null && selectedProperties.every(p => p !== null);
+    if (step === 3) return selectedProperties.every(p => p !== null);
     return false;
   };
 
@@ -373,42 +373,24 @@ const AddWidgetModal: React.FC<AddWidgetModalProps> = ({ isOpen, onClose, onSucc
 
   const renderSeriesConfiguration = () => (
     <div className="space-y-6">
-      <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium mb-2 opacity-90">Select Device</label>
-          <select
-            value={selectedDevice || ''}
-            onChange={(e) => setSelectedDevice(Number(e.target.value) || null)}
-            className={`w-full px-3 py-2 rounded-lg border ${border} bg-transparent text-sm`}
+      <div>
+        <label className="block text-sm font-medium mb-2 opacity-90">Number of Series</label>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setNumSeries(Math.max(1, numSeries - 1))}
+            className={`p-2 rounded-lg border ${border} hover:bg-white/5 transition`}
           >
-            <option value="">Choose a device...</option>
-            {devices.map((d) => (
-              <option key={d.deviceId || d.id} value={d.deviceId || d.id}>
-                {d.deviceSerial || d.serial_number}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-2 opacity-90">Number of Series</label>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setNumSeries(Math.max(1, numSeries - 1))}
-              className={`p-2 rounded-lg border ${border} hover:bg-white/5 transition`}
-            >
-              <Minus className="w-4 h-4" />
-            </button>
-            <div className={`flex-1 text-center py-2 rounded-lg border ${border} font-medium`}>
-              {numSeries}
-            </div>
-            <button
-              onClick={() => setNumSeries(Math.min(5, numSeries + 1))}
-              className={`p-2 rounded-lg border ${border} hover:bg-white/5 transition`}
-            >
-              <Plus className="w-4 h-4" />
-            </button>
+            <Minus className="w-4 h-4" />
+          </button>
+          <div className={`flex-1 text-center py-2 rounded-lg border ${border} font-medium`}>
+            {numSeries}
           </div>
+          <button
+            onClick={() => setNumSeries(Math.min(5, numSeries + 1))}
+            className={`p-2 rounded-lg border ${border} hover:bg-white/5 transition`}
+          >
+            <Plus className="w-4 h-4" />
+          </button>
         </div>
       </div>
 

@@ -503,19 +503,34 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
               </div>
 
               {userRole === 'admin' && (
-                <motion.button
-                  onClick={() => setEditMode(!editMode)}
-                  whileTap={{ scale: 0.95 }}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
-                    editMode
-                      ? 'bg-green-600 text-white'
-                      : theme === 'dark'
-                      ? 'bg-[#6656F5] text-white hover:bg-[#4c3af5]'
-                      : 'bg-white border border-gray-300 text-gray-800 hover:bg-gray-100'
-                  }`}
-                >
-                  {editMode ? 'Save Layout' : 'Edit Layout'}
-                </motion.button>
+                <div className="flex items-center gap-3">
+                  {editMode && (
+                    <motion.button
+                      onClick={() => setShowAddWidgetModal(true)}
+                      whileTap={{ scale: 0.95 }}
+                      className={`px-4 py-2 text-sm font-medium rounded-lg transition flex items-center gap-2 ${
+                        theme === 'dark'
+                          ? 'bg-blue-600 text-white hover:bg-blue-700'
+                          : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }`}
+                    >
+                      <span>+ Add Widget</span>
+                    </motion.button>
+                  )}
+                  <motion.button
+                    onClick={() => setEditMode(!editMode)}
+                    whileTap={{ scale: 0.95 }}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
+                      editMode
+                        ? 'bg-green-600 text-white hover:bg-green-700'
+                        : theme === 'dark'
+                        ? 'bg-[#6656F5] text-white hover:bg-[#4c3af5]'
+                        : 'bg-white border border-gray-300 text-gray-800 hover:bg-gray-100'
+                    }`}
+                  >
+                    {editMode ? 'Save Layout' : 'Edit Layout'}
+                  </motion.button>
+                </div>
               )}
             </div>
           </div>
@@ -527,17 +542,6 @@ const DashboardContent: React.FC<DashboardContentProps> = ({
                 : ''
             }`}
           >
-            {editMode && (
-              <div className="">
-                <button
-                  onClick={() => setShowAddWidgetModal(true)}
-                  className="bg-[#162345] text-white text-sm px-3 py-3 rounded-sm"
-                >
-                  + Add New Widget
-                </button>
-              </div>
-            )}
-
             {widgetsLoaded ? (
               <div style={{ width: '100%' }}>
                 <DynamicDashboard
